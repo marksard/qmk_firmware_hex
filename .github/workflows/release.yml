@@ -1,4 +1,4 @@
-name: Build and Release my_customize keyboard
+name: Build and Release own_build keyboard
 on:
   push:
     tags:
@@ -23,15 +23,15 @@ jobs:
     container:
       image: docker://qmkfm/base_container:latest
     steps:
-    - name: Checkout marksard/qmk_firmware:my_customize
+    - name: Checkout marksard/qmk_firmware:own_build
       uses: actions/checkout@v2
       with:
         repository: marksard/qmk_firmware
-        ref: my_customize
+        ref: own_build
         submodules: true
     - name: Build firmware
-        # chmod +x ./_release_my_customize.sh
-        # ./_release_my_customize.sh -release
+        # chmod +x ./_release_own_build.sh
+        # ./_release_own_build.sh -release
       run: |
         make treadstone32:via
         make treadstone32/lite:via
