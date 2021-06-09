@@ -4,7 +4,7 @@ on:
     tags:
       - merge-*
 jobs:
-  build:
+  merge_build:
     runs-on: ubuntu-latest
     container:
       image: docker://qmkfm/base_container:latest
@@ -15,7 +15,7 @@ jobs:
         repository: marksard/qmk_firmware
         ref: own_build
         submodules: true
-    - name: Build firmware
+    - name: Merge firmware
       run: |
 
         git config --global user.name ${NAME}
@@ -35,12 +35,37 @@ jobs:
         # git checkout master
         git merge --no-edit upstream/master
 
-        # build
+    - name: Build firmware
+      run: |
+
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
+
+    - name: Merge push
+      run: |
+
+        git push origin qmk_firmware
+
+    # success notify
+    - name: Slack Notification on Success
+      if: success()
+      uses: rtCamp/action-slack-notify@v2.0.2
+      env:
+        SLACK_CHANNEL: ci
+        SLACK_TITLE: Test Success
+        SLACK_COLOR: good
+
+    # error notify
+    - name: Slack Notification on Failure
+      uses: rtCamp/action-slack-notify@v2.0.2
+      if: failure()
+      env:
+        SLACK_CHANNEL: ci
+        SLACK_TITLE: Test Failure
+        SLACK_COLOR: danger
 
       env:
         NAME: marksard(merge_action_bot)
         EMAIL: marksard@rocketmail.com
         REPO_FORK: https://github.com/qmk/qmk_firmware.git
-        
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
