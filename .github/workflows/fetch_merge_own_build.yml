@@ -3,6 +3,13 @@ on:
   push:
     tags:
       - merge-*
+
+env:
+  NAME: marksard(merge_action_bot)
+  EMAIL: marksard@rocketmail.com
+  REPO_FORK: https://github.com/qmk/qmk_firmware.git
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 jobs:
   merge_build:
     runs-on: ubuntu-latest
@@ -63,9 +70,3 @@ jobs:
         SLACK_CHANNEL: ci
         SLACK_TITLE: Test Failure
         SLACK_COLOR: danger
-
-      env:
-        NAME: marksard(merge_action_bot)
-        EMAIL: marksard@rocketmail.com
-        REPO_FORK: https://github.com/qmk/qmk_firmware.git
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
