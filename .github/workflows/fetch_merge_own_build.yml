@@ -20,7 +20,7 @@ on:
     #         │ │ │ │ │
     #         │ │ │ │ │
     #         * * * * *
-    - cron:  '0 1 * * *'
+    - cron:  '5 0 * * *'
 
 env:
   NAME: marksard(merge_action_bot)
