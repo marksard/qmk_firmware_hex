@@ -48,16 +48,15 @@ jobs:
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
 
-    - name: Merge push
-      run: |
+    # - name: Merge push
+    #   run: |
 
-        git push origin own_build
+    #     git push origin own_build
 
     - name: Slack Notification on Success
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.2
       env:
-        SLACK_CHANNEL: ci
         SLACK_TITLE: Test Success
         SLACK_COLOR: good
 
@@ -65,6 +64,5 @@ jobs:
       uses: rtCamp/action-slack-notify@v2.0.2
       if: failure()
       env:
-        SLACK_CHANNEL: ci
         SLACK_TITLE: Test Failure
         SLACK_COLOR: danger
