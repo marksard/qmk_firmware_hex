@@ -51,9 +51,8 @@ jobs:
     - name: Merge push
       run: |
 
-        git push origin qmk_firmware
+        git push origin own_build
 
-    # success notify
     - name: Slack Notification on Success
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.2
@@ -62,7 +61,6 @@ jobs:
         SLACK_TITLE: Test Success
         SLACK_COLOR: good
 
-    # error notify
     - name: Slack Notification on Failure
       uses: rtCamp/action-slack-notify@v2.0.2
       if: failure()
