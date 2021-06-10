@@ -33,6 +33,7 @@ jobs:
       run: |
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
+        ./_release_own_build.sh -viapack
         
     - name: Upload artifact
       uses: actions/upload-artifact@v2
