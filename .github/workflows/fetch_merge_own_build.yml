@@ -5,22 +5,21 @@ name: Build Check after merge with own_build keyboard
 #       - merge-*
 
 on:
+  push:
+    branches:
+      - main
+
   # Runs on 10 minutes past every hour
   schedule:
-    # Ref: 
-    #   - https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule
-    #   - https://crontab.guru/examples.html
     # Cron format:
     #         ┌───────────── minute (0 - 59)
     #         │ ┌───────────── hour (0 - 23)
     #         │ │ ┌───────────── day of the month (1 - 31)
     #         │ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
     #         │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-    #         │ │ │ │ │                                   
-    #         │ │ │ │ │
     #         │ │ │ │ │
     #         * * * * *
-    - cron:  '5 0 * * *'
+    - cron:  '0 9 * * 1'
 
 env:
   NAME: marksard(merge_action_bot)
@@ -75,8 +74,9 @@ jobs:
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.2
       env:
-        SLACK_TITLE: Test Success
+        SLACK_TITLE: Merge Success
         SLACK_COLOR: good
+        SLACK_MESSAGE: 'Merge check has been succeeded. https://github.com/marksard/qmk_firmware_hex/actions'
 
     - name: Slack Notification on Failure
       uses: rtCamp/action-slack-notify@v2.0.2
@@ -84,3 +84,4 @@ jobs:
       env:
         SLACK_TITLE: Test Failure
         SLACK_COLOR: danger
+        SLACK_MESSAGE: 'Merge check has been failed. Please check last log at github action. https://github.com/marksard/qmk_firmware_hex/actions'
