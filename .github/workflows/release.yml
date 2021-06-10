@@ -1,9 +1,6 @@
 name: Build and Release own_build keyboard
 on:
   push:
-    branches:
-      - main
-  push:
     tags:
       - release-*
 jobs:
