@@ -31,8 +31,8 @@ jobs:
         submodules: true
     - name: Build firmware
       run: |
-        # chmod +x ./_release_own_build.sh
-        # ./_release_own_build.sh -release
+        chmod +x ./_release_own_build.sh
+        ./_release_own_build.sh -release
         
     - name: Upload artifact
       uses: actions/upload-artifact@v2
