@@ -34,13 +34,13 @@ jobs:
     container:
       image: docker://qmkfm/base_container:latest
     steps:
-    - name: Checkout marksard/qmk_firmware:own_build
+    - name: Checkout
       uses: actions/checkout@v2
       with:
         repository: marksard/qmk_firmware
         ref: own_build
         submodules: true
-        token: ${ACCESS_TOKEN}
+        token: ${{ secrets.ACCESS_TOKEN }}
     - name: Merge firmware
       run: |
         git config --global user.name ${NAME}
