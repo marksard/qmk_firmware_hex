@@ -63,7 +63,7 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ own_build }}
+        branch: ${{ 'own_build' }}
 
     - name: Slack Notification on Success
       if: success()
