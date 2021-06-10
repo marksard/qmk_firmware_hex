@@ -5,9 +5,9 @@ name: Build Check after merge with own_build keyboard
 #       - merge-*
 
 on:
-  push:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
 
   # Runs on 10 minutes past every hour
   schedule:
