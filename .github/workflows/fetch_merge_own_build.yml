@@ -55,15 +55,14 @@ jobs:
 
     - name: Build firmware
       run: |
-
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ 'own_build' }}
+    - name: Merge push
+      env:
+        ACCESS_TOKEN:  ${{ secrets.ACCESS_TOKEN }}
+      run: |
+        git push https://x-access-token:${ACCESS_TOKEN}@github.com/marksard/qmk_firmware own_build
 
     - name: Slack Notification on Success
       if: success()
