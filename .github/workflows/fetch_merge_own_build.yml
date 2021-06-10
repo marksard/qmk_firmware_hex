@@ -62,7 +62,7 @@ jobs:
       env:
         ACCESS_TOKEN:  ${{ secrets.ACCESS_TOKEN }}
       run: |
-        git push https://x-access-token:${ACCESS_TOKEN}@github.com/marksard/qmk_firmware own_build
+        git push https://x-access-token:${ACCESS_TOKEN}@github.com/marksard/qmk_firmware.git own_build
 
     - name: Slack Notification on Success
       if: success()
