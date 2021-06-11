@@ -63,8 +63,7 @@ jobs:
     - id: hex_file_size_check
       name: Hex file size check
       run: |
-        check_result=$(bash _release_own_build.sh -hexcheck)
-        # エスケープ処理
+        check_result=$(bash ./_release_own_build.sh -hexcheck)
         check_result="${check_result//$'\n'/\\n}"
         echo $check_result
         echo "::set-output name=std_out::$check_result"
