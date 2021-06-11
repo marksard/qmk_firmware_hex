@@ -1,11 +1,7 @@
 name: Build Check after merge with own_build keyboard
 on:
-  # タグ追加で実行
-  push:
-    tags:
-      - merge-*
-    # branches:
-    #   - main
+  # 手動実行
+  workflow_dispatch:
   # 周期実行
   schedule:
     # Cron format:
@@ -57,11 +53,16 @@ jobs:
         git fetch upstream
         git merge --no-edit upstream/master
 
-    # 指定したブランチに入れてあるmakeチェック用スクリプトを起動
+    # 指定したブランチに入れてあるmakeスクリプトを起動
     - name: Make completion test
       run: |
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
+
+    # 指定したブランチに入れてあるファイルサイズチェック用スクリプトを起動
+    - name: Hex file size check
+      run: |
+        ./_release_own_build.sh -hexcheck
 
     # makeスクリプトでエラーがでなければpush
     - name: Push

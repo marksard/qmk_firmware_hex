@@ -1,5 +1,7 @@
 name: Build and Release own_build keyboard
 on:
+  # 手動実行
+  workflow_dispatch:
   # タグ追加で実行
   push:
     tags:
@@ -19,6 +21,8 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Keyboard firmware ${{ github.ref }}
+          # body: |
+          #   - QMK Firmwareの最新ソースコードをマージ
 
   # QMKファームウェア作成
   make_firmware:
@@ -42,6 +46,11 @@ jobs:
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
         ./_release_own_build.sh -viapack
+
+    # 指定したブランチに入れてあるファイルサイズチェック用スクリプトを起動
+    - name: Hex file size check
+      run: |
+        ./_release_own_build.sh -hexcheck
 
     # このコンテナで作成したファイルを指定したフォルダごとアップロード
     - name: Upload artifact
