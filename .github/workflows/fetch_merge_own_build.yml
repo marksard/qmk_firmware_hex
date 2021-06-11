@@ -40,18 +40,18 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
 
     # マージ作業
-    - name: Merge
-      run: |
-        git config --global user.name ${NAME}
-        git config --global user.email ${EMAIL}
-        git config --global pull.rebase merges
-        git pull --unshallow  # this option is very important, you would get
-                              # complains about unrelated histories without it.
-                              # (but actions/checkout@v2 can also be instructed
-                              # to fetch all git depth right from the start)
-        git remote add upstream ${REPO_FORK}        
-        git fetch upstream
-        git merge --no-edit upstream/master
+    # - name: Merge
+    #   run: |
+    #     git config --global user.name ${NAME}
+    #     git config --global user.email ${EMAIL}
+    #     git config --global pull.rebase merges
+    #     git pull --unshallow  # this option is very important, you would get
+    #                           # complains about unrelated histories without it.
+    #                           # (but actions/checkout@v2 can also be instructed
+    #                           # to fetch all git depth right from the start)
+    #     git remote add upstream ${REPO_FORK}        
+    #     git fetch upstream
+    #     git merge --no-edit upstream/master
 
     # 指定したブランチに入れてあるmakeスクリプトを起動
     - name: Make completion test
@@ -60,9 +60,14 @@ jobs:
         ./_release_own_build.sh -release
 
     # 指定したブランチに入れてあるファイルサイズチェック用スクリプトを起動
-    - name: Hex file size check
+    - id: hex_file_size_check
+      name: Hex file size check
       run: |
-        ./_release_own_build.sh -hexcheck
+        check_result=$(./_release_own_build.sh -hexcheck)
+        # エスケープ処理
+        check_result="${check_result//$'\n'/\\n}"
+        echo $check_result
+        echo "::set-output name=std_out::$check_result"
 
     # makeスクリプトでエラーがでなければpush
     - name: Push
@@ -75,12 +80,12 @@ jobs:
       uses: rtCamp/action-slack-notify@v2.0.2
       env:
         SLACK_TITLE: Merge Success
-        SLACK_COLOR: '#33cc33'
-        SLACK_MESSAGE: 'Merge check has been succeeded.'
+        SLACK_COLOR: good
+        SLACK_MESSAGE: 'Merge check has been succeeded.\n' ${{ steps.hex_file_size_check.outputs.std_out }}
     - name: Slack Notification on Failure
       uses: rtCamp/action-slack-notify@v2.0.2
       if: failure()
       env:
         SLACK_TITLE: Test Failure
-        SLACK_COLOR: '#ff0000'
-        SLACK_MESSAGE: ':fire:　Merge check has been failed. Please check last log at github action.　:fire:'
+        SLACK_COLOR: danger
+        SLACK_MESSAGE: ':fire:　Merge check has been failed. Please check last log at github action.　:fire:.\n' ${{ steps.hex_file_size_check.outputs.std_out }
