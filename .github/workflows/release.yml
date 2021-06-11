@@ -1,9 +1,11 @@
 name: Build and Release own_build keyboard
 on:
+  # タグ追加で実行
   push:
     tags:
       - release-*
 jobs:
+  # リリースページ作成
   create_release:
     runs-on: ubuntu-latest
     outputs:
@@ -16,33 +18,42 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: Keyboard firmware ${{ github.ref }}
 
-  build:
+  # QMKファームウェア作成
+  make_firmware:
     runs-on: ubuntu-latest
+    # QMKのコンテナでビルド
     container:
       image: docker://qmkfm/base_container:latest
     steps:
-    - name: Checkout marksard/qmk_firmware:own_build
+    # QMKリポジトリと使用するブランチを選択
+    - name: Checkout
       uses: actions/checkout@v2
       with:
         repository: marksard/qmk_firmware
         ref: own_build
         submodules: true
-    - name: Build firmware
+
+    # 指定したブランチに入れてあるmakeスクリプトを起動
+    # via用hexファイルをmakeし個別にzip圧縮し./_releaseフォルダに置く
+    - name: Make firmware
       run: |
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
         ./_release_own_build.sh -viapack
-        
+
+    # このコンテナで作成したファイルを指定したフォルダごとアップロード
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: firmware
         path: ./_release
 
+  # リリース作業
   release:
-    needs: [create_release, build]
+    # create_releaseとmake_firmwareのjobが完了していることを実行条件とする
+    needs: [create_release, make_firmware]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,16 +63,21 @@ jobs:
           marksard_leftover30_via, marksard_rhymestone_rev1_via,
           marksard_treadstone60_via]
     steps:
+    # Upload artifactでアップロードしたファイルをダウンロード
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
         name: firmware
+
+    # リリースページへの登録
     - name: Upload a new release asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        # 上のcreate_releaseで自動生成されるupload_urlを指定
         upload_url: ${{ needs.create_release.outputs.upload_url }}
+        # 上のkeyboardsリストにあるぶんのファイルが登録される
         asset_path: ${{ matrix.keyboards }}.zip
         asset_name: ${{ matrix.keyboards }}.zip
         asset_content_type: application/zip

@@ -1,15 +1,12 @@
 name: Build Check after merge with own_build keyboard
-# on:
-#   push:
-#     tags:
-#       - merge-*
-
 on:
-#  push:
-#    branches:
-#      - main
-
-  # Runs on 10 minutes past every hour
+  # タグ追加で実行
+  push:
+    tags:
+      - merge-*
+    # branches:
+    #   - main
+  # 周期実行
   schedule:
     # Cron format:
     #         ┌───────────── minute (0 - 59)
@@ -21,26 +18,33 @@ on:
     #         * * * * *
     - cron:  '0 9 * * 1'
 
-env:
-  NAME: marksard(merge_action_bot)
-  EMAIL: marksard@rocketmail.com
-  REPO_FORK: https://github.com/qmk/qmk_firmware.git
-  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-
 jobs:
-  merge_build:
+  # 最新マージ→makeチェック→push処理
+  merge_check_push:
     runs-on: ubuntu-latest
     container:
+      # QMKのコンテナでビルド
       image: docker://qmkfm/base_container:latest
+    env:
+      NAME: 4rkb1rd
+      EMAIL: marksard@rocketmail.com
+      REPO_FORK: https://github.com/qmk/qmk_firmware.git
+      # SlackのフックURLをsecretに登録が必要
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
     steps:
+    # QMKリポジトリと使用するブランチを選択
     - name: Checkout
       uses: actions/checkout@v2
       with:
         repository: marksard/qmk_firmware
         ref: own_build
         submodules: true
+        # Personal Access Token設定とsecret登録が必要
         token: ${{ secrets.ACCESS_TOKEN }}
-    - name: Merge firmware
+
+    # マージ作業
+    - name: Merge
       run: |
         git config --global user.name ${NAME}
         git config --global user.email ${EMAIL}
@@ -53,27 +57,29 @@ jobs:
         git fetch upstream
         git merge --no-edit upstream/master
 
-    - name: Build firmware
+    # 指定したブランチに入れてあるmakeチェック用スクリプトを起動
+    - name: Make completion test
       run: |
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -release
 
-    - name: Merge push
+    # makeスクリプトでエラーがでなければpush
+    - name: Push
       run: |
         git push origin own_build
 
+    # Slackへの通知
     - name: Slack Notification on Success
       if: success()
       uses: rtCamp/action-slack-notify@v2.0.2
       env:
         SLACK_TITLE: Merge Success
-        SLACK_COLOR: good
+        SLACK_COLOR: '#33cc33'
         SLACK_MESSAGE: 'Merge check has been succeeded.'
-
     - name: Slack Notification on Failure
       uses: rtCamp/action-slack-notify@v2.0.2
       if: failure()
       env:
         SLACK_TITLE: Test Failure
-        SLACK_COLOR: danger
-        SLACK_MESSAGE: 'Merge check has been failed. Please check last log at github action.'
+        SLACK_COLOR: '#ff0000'
+        SLACK_MESSAGE: ':fire:　Merge check has been failed. Please check last log at github action.　:fire:'
