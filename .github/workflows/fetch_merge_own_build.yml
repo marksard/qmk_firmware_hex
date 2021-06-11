@@ -65,10 +65,9 @@ jobs:
       shell: bash
       run: |
         check_result=$(./_release_own_build.sh -hexcheck)
-        check_result="${check_result//$'\n'/\\n}"
-        echo $check_result
-        echo "::set-output name=std_out::$check_result"
-
+        echo "check_result<<EOF" >> $GITHUB_ENV
+        echo "$check_result" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     # makeスクリプトでエラーがでなければpush
     - name: Push
       run: |
@@ -81,11 +80,11 @@ jobs:
       env:
         SLACK_TITLE: Merge Success
         SLACK_COLOR: good
-        SLACK_MESSAGE: "Merge check has been succeeded.\n${{ steps.hex_file_size_check.outputs.std_out }}"
+        SLACK_MESSAGE: "Merge check has been succeeded.\n${{ env.check_result }}"
     - name: Slack Notification on Failure
       uses: rtCamp/action-slack-notify@v2.0.2
       if: failure()
       env:
         SLACK_TITLE: Test Failure
         SLACK_COLOR: danger
-        SLACK_MESSAGE: ":fire: Merge check has been failed. Please check last log at github action. :fire:.\n${{ steps.hex_file_size_check.outputs.std_out }}"
+        SLACK_MESSAGE: ":fire: Merge check has been failed. Please check last log at github action. :fire:.\n${{ env.check_result }}"
