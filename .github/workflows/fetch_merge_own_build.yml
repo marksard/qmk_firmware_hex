@@ -12,7 +12,7 @@ on:
     #         │ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
     #         │ │ │ │ │
     #         * * * * *
-    - cron:  '0 9 * * 1'
+    - cron:  '0 15 * * 0'
 
 jobs:
   # 最新マージ→makeチェック→push処理
