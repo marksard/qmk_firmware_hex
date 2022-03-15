@@ -57,7 +57,7 @@ jobs:
     - name: Make completion test
       run: |
         chmod +x ./_release_own_build.sh
-        ./_release_own_build.sh -release
+        ./_release_own_build.sh -via
 
     # 指定したブランチに入れてあるファイルサイズチェック用スクリプトを起動
     - name: Hex file size check
