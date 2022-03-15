@@ -2,7 +2,7 @@ name: Build Check after merge with own_build keyboard
 on:
   # 手動実行
   workflow_dispatch:
-  # 周期実行
+  # 周期実行(日本時間の月曜0時に動作)
   schedule:
     # Cron format:
     #         ┌───────────── minute (0 - 59)
