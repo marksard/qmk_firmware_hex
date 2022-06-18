@@ -43,6 +43,7 @@ jobs:
     # via用hexファイルをmakeし個別にzip圧縮し./_releaseフォルダに置く
     - name: Make firmware
       run: |
+        python3 -m pip install qmk
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
         ./_release_own_build.sh -viapack
