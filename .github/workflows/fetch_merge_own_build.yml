@@ -53,7 +53,7 @@ jobs:
         git fetch upstream
         git merge --no-edit upstream/master
 
-    # 指定したブランチに入れてあるmakeスクリプトを起動
+    # 指定したブランチに入れてあるmakeスクリプトで各キーボードのファームウェアをビルド
     - name: Make completion test
       run: |
         # qmkのセットアップがqmk dockerイメージ側で作成されなくなっている
