@@ -44,6 +44,7 @@ jobs:
     - name: Make firmware
       run: |
         python3 -m pip install qmk
+        make git-submodule
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
         ./_release_own_build.sh -viapack
