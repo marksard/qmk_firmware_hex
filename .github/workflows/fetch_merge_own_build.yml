@@ -42,7 +42,7 @@ jobs:
     # マージ作業
     - name: Merge
       run: |
-       git config --global --add safe.directory /__w/qmk_firmware_hex/qmk_firmware_hex
+        git config --global --add safe.directory /__w/qmk_firmware_hex/qmk_firmware_hex
         git config --global user.name ${NAME}
         git config --global user.email ${EMAIL}
         git config --global pull.rebase merges
