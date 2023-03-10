@@ -13,7 +13,7 @@ on:
     #         │ │ │ │ │
     #         * * * * *
     - cron:  '0 15 * * 0'
- 
+
 jobs:
   # 最新マージ→makeチェック→push処理
   merge_check_push:
