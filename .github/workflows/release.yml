@@ -76,7 +76,7 @@ jobs:
           marksard_treadstone32_rev1_via, marksard_treadstone32_lite_via,
           marksard_treadstone48_rev1_via, marksard_treadstone48_rev2_via,
           marksard_leftover30_via, marksard_rhymestone_rev1_via,
-          marksard_treadstone60_via]
+          marksard_treadstone60_via, marksard_m0ii040pcb_via]
     steps:
     # Upload artifactでアップロードしたファイルをダウンロード
     - name: Download artifact
