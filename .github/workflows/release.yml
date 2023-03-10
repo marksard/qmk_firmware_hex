@@ -45,6 +45,7 @@ jobs:
       run: |
         python3 -m pip install qmk
         qmk clean -a
+        git config --global --add safe.directory /__w/qmk_firmware_hex/qmk_firmware_hex
         git clean -df
         git clean -f
         git checkout .
