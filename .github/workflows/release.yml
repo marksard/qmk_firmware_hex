@@ -45,6 +45,9 @@ jobs:
       run: |
         python3 -m pip install qmk
         qmk clean -a
+        git clean -df
+        git clean -f
+        git checkout .
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
         ./_release_own_build.sh -viapack
