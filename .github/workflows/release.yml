@@ -36,7 +36,8 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: marksard/qmk_firmware
-        ref: own_build_0.18.17
+        #ref: own_build_0.18.17
+        ref: follow_master_confirm_build
         submodules: true
 
     # 指定したブランチに入れてあるmakeスクリプトを起動
