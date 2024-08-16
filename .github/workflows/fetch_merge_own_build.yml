@@ -31,7 +31,7 @@ jobs:
     steps:
     # QMKリポジトリと使用するブランチを選択
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: marksard/qmk_firmware
         ref: own_build
