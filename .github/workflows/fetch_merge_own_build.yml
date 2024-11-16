@@ -58,6 +58,7 @@ jobs:
     - name: Make completion test
       run: |
         # qmkのセットアップがqmk dockerイメージ側で作成されなくなっている
+        python3 -m pip install --upgrade pip
         python3 -m pip install qmk
         chmod +x ./_release_own_build.sh
         ./_release_own_build.sh -via
