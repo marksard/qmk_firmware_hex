@@ -53,7 +53,7 @@ jobs:
     # via用hexファイルをmakeし個別にzip圧縮し./_releaseフォルダに置く
     - name: Make firmware
       run: |
-        /usr/bin/python3 -m pip install --upgrade pip
+        /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
         /usr/bin/python3 -m pip install qmk
         qmk clean -a
         git config --global --add safe.directory /__w/qmk_firmware_hex/qmk_firmware_hex
