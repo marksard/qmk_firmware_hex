@@ -28,8 +28,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PIP_ROOT_USER_ACTION: ignore
-        with:
+         with:
           tag_name: ${{ github.ref_name }}
           name: Keyboard firmware ${{ github.ref_name }}
           # generate_release_notes: true
@@ -53,6 +52,8 @@ jobs:
     # 指定したブランチに入れてあるmakeスクリプトを起動
     # via用hexファイルをmakeし個別にzip圧縮し./_releaseフォルダに置く
     - name: Make firmware
+        env:
+          PIP_ROOT_USER_ACTION: ignore
       run: |
         /usr/bin/python3 -m pip install --upgrade pip setuptools wheel
         /usr/bin/python3 -m pip install qmk
