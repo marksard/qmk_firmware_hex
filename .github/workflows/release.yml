@@ -58,20 +58,12 @@ jobs:
     # make_firmwareのjobが完了していることを実行条件とする
     needs: [make_firmware]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        keyboards: [
-          marksard_treadstone32_rev1_via, marksard_treadstone32_lite_via, marksard_treadstone32_rev2_via,
-          marksard_treadstone48_rev1_via, marksard_treadstone48_rev2_via,
-          marksard_leftover30_via, marksard_rhymestone_rev1_via,
-          marksard_treadstone60_via, marksard_m0ii040pcb_via, marksard_numatray_via]
     steps:
     # Upload artifactでアップロードしたファイルをダウンロード
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
         name: firmware
-
     # リリースページへの登録
     - name: Upload a new release asset
       uses: softprops/action-gh-release@v2
@@ -80,4 +72,14 @@ jobs:
       with:
         tag_name: ${{ github.ref_name }}
         name: Keyboard firmware ${{ github.ref_name }}
-        files: ${{ matrix.keyboards }}.zip
+        files: |
+                  marksard_treadstone32_rev1_via.zip
+                  marksard_treadstone32_lite_via.zip
+                  marksard_treadstone32_rev2_via.zip
+                  marksard_treadstone48_rev1_via.zip
+                  marksard_treadstone48_rev2_via.zip
+                  marksard_leftover30_via.zip
+                  marksard_rhymestone_rev1_via.zip
+                  marksard_treadstone60_via.zip
+                  marksard_m0ii040pcb_via.zip
+                  marksard_numatray_via.zip
