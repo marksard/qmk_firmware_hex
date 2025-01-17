@@ -61,7 +61,7 @@ jobs:
 
     # このコンテナで作成したファイルを指定したフォルダごとアップロード
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: firmware
         path: ./_release
@@ -77,11 +77,11 @@ jobs:
           marksard_treadstone32_rev1_via, marksard_treadstone32_lite_via, marksard_treadstone32_rev2_via,
           marksard_treadstone48_rev1_via, marksard_treadstone48_rev2_via,
           marksard_leftover30_via, marksard_rhymestone_rev1_via,
-          marksard_treadstone60_via, marksard_m0ii040pcb_via]
+          marksard_treadstone60_via, marksard_m0ii040pcb_via, marksard_numatray_via]
     steps:
     # Upload artifactでアップロードしたファイルをダウンロード
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: firmware
 
