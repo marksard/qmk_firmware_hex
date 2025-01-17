@@ -27,8 +27,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          name: Keyboard firmware ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: Keyboard firmware ${{ github.ref_name }}
           generate_release_notes: true
 
   # QMKファームウェア作成
