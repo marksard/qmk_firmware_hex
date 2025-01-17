@@ -56,6 +56,7 @@ jobs:
         PIP_ROOT_USER_ACTION: ignore
       run: |
         /usr/bin/python3 -m pip install --upgrade pip setuptools wheel --root-user-action=ignore
+        /usr/bin/python3 -m pip install -r /__w/qmk_firmware_hex/qmk_firmware_hex/requirements.txt
         /usr/bin/python3 -m pip install qmk --root-user-action=ignore
         qmk clean -a
         git config --global --add safe.directory /__w/qmk_firmware_hex/qmk_firmware_hex
