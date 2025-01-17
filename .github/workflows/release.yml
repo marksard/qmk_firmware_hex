@@ -7,23 +7,6 @@ on:
     tags:
       - release-*
 jobs:
-  # リリースページ作成
-  create_release:
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Keyboard firmware ${{ github.ref }}
-          # body: |
-          #   - QMK Firmwareの最新ソースコードをマージ
-
   # QMKファームウェア作成
   make_firmware:
     runs-on: ubuntu-latest
@@ -72,8 +55,8 @@ jobs:
 
   # リリース作業
   release:
-    # create_releaseとmake_firmwareのjobが完了していることを実行条件とする
-    needs: [create_release, make_firmware]
+    # make_firmwareのjobが完了していることを実行条件とする
+    needs: [make_firmware]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -91,13 +74,10 @@ jobs:
 
     # リリースページへの登録
     - name: Upload a new release asset
-      uses: actions/upload-release-asset@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        # 上のcreate_releaseで自動生成されるupload_urlを指定
-        upload_url: ${{ needs.create_release.outputs.upload_url }}
-        # 上のkeyboardsリストにあるぶんのファイルが登録される
-        asset_path: ${{ matrix.keyboards }}.zip
-        asset_name: ${{ matrix.keyboards }}.zip
-        asset_content_type: application/zip
+        tag_name: ${{ github.ref_name }}
+        name: Keyboard firmware ${{ github.ref_name }}
+        files: ${{ matrix.keyboards }}.zip
