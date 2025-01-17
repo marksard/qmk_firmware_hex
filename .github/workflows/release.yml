@@ -62,7 +62,7 @@ jobs:
 
     # このコンテナで作成したファイルを指定したフォルダごとアップロード
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: firmware
         path: ./_release
