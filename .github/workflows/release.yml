@@ -100,13 +100,10 @@ jobs:
 
     # リリースページへの登録
     - name: Upload a new release asset
-      uses: actions/upload-release-asset@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: svenstaro/upload-release-action@v2
       with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
         # 上のcreate_releaseで自動生成されるupload_urlを指定
-        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        file: ${{ needs.create_release.outputs.upload_url }}
         # 上のkeyboardsリストにあるぶんのファイルが登録される
-        asset_path: ${{ matrix.keyboards }}.zip
         asset_name: ${{ matrix.keyboards }}.zip
-        asset_content_type: application/zip
