@@ -13,25 +13,16 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      # - name: Create release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref }}
-      #     release_name: Keyboard firmware ${{ github.ref }}
-      #     # body: |
-      #     #   - QMK Firmwareの最新ソースコードをマージ
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          name: Keyboard firmware ${{ github.ref_name }}
-          # generate_release_notes: true
+          tag_name: ${{ github.ref }}
+          release_name: Keyboard firmware ${{ github.ref }}
+          # body: |
+          #   - QMK Firmwareの最新ソースコードをマージ
 
   # QMKファームウェア作成
   make_firmware:
@@ -100,10 +91,13 @@ jobs:
 
     # リリースページへの登録
     - name: Upload a new release asset
-      uses: svenstaro/upload-release-action@v2
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
         # 上のcreate_releaseで自動生成されるupload_urlを指定
-        file: ${{ needs.create_release.outputs.upload_url }}/${{ matrix.keyboards }}.zip
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
         # 上のkeyboardsリストにあるぶんのファイルが登録される
+        asset_path: ${{ matrix.keyboards }}.zip
         asset_name: ${{ matrix.keyboards }}.zip
+        asset_content_type: application/zip
