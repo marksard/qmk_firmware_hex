@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Create release
         id: create_release
-        uses: actions/create-release@v2
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -62,7 +62,7 @@ jobs:
 
     # このコンテナで作成したファイルを指定したフォルダごとアップロード
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: firmware
         path: ./_release
