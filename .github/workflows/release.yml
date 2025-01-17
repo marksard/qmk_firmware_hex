@@ -104,6 +104,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         # 上のcreate_releaseで自動生成されるupload_urlを指定
-        file: ${{ needs.create_release.outputs.upload_url }}
+        file: target/release/${{ needs.create_release.outputs.upload_url }}
         # 上のkeyboardsリストにあるぶんのファイルが登録される
         asset_name: ${{ matrix.keyboards }}.zip
